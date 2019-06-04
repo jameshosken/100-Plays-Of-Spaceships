@@ -1,0 +1,43 @@
+Accel/decel algaorithm for autonomous spaceship with stationary target:
+
+Context:
+	d = v/t
+
+	a = (vf-vi)/t
+
+	Required a = (0-vi)/t = -v/t
+		t being time to traverse distance at current v
+
+	when required a >= max a, start decelerating
+
+Alg:
+
+if(not within target radius):
+
+	- Get max acceleration of ship (a_m)
+
+	- Determine velocity [v] relative to target
+
+	- Determine distance [d] to target
+
+	- Determine time to target [t]  (= d/v)
+
+	- If (-v)/t >= a_m, start decelerating, else accelerate.
+
+else:
+	- reduce v to 0
+
+
+
+*New Constraint: non-stationary start.
+
+thrustTargetPosition = desiredTargetPosition - velocityVector 
+thrustVector = thrustTargetPosition - currentPosition
+
+*New Constraint: Can only thrust forward
+
+To rotate towards thrust vector:
+
+For rotation:
+
+- Find angle of rotation (cross product of current fwd and target.)

@@ -23,7 +23,7 @@ public class HandleEngineEmission : MonoBehaviour
 
     void ApplyThrust(float thrust)
     {
-        Debug.Log("Thrusting: " + thrust);
+        //Debug.Log("Thrusting: " + thrust);
         mat.SetColor("_EmissionColor", thrustColour * Mathf.Max(thrust,0) * thrustColourMultiplier);
         
     }
