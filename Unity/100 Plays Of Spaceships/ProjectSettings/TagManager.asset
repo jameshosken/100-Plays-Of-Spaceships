@@ -18,7 +18,7 @@ TagManager:
   - PostProcessing
   - HUD
   - RaycastOnly
-  - 
+  - Shootable
   - 
   - 
   - 
@@ -42,4 +42,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: FRONT
+    uniqueID: 1914823369
     locked: 0
