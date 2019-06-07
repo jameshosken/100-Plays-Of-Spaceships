@@ -14,14 +14,20 @@ public class LootAtFixed : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-
         transform.LookAt(reticule.position);
         
     }
 
     public void SetTargetDistance(float d)
     {
+        reticule.position = Camera.main.transform.position;
         reticule.localPosition = Vector3.forward * d;
+    }
+
+    public void SetTarget(Transform t)
+    {
+
+        reticule.localPosition = Vector3.zero;
+        reticule.position = t.position;
     }
 }

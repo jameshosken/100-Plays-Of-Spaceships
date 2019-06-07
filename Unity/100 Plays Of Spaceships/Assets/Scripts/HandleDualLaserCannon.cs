@@ -11,9 +11,10 @@ public class HandleDualLaserCannon : MonoBehaviour
     [SerializeField] ParticleSystem particles;
     [Tooltip("Particles per Second")]
     [SerializeField] float firingRate = 10; // Particles Per Second
+    [SerializeField] float damage = 50;
 
     [SerializeField] GameObject HitFX;
-    [SerializeField] HitIndicator hitIndicator;
+    HitIndicator hitIndicator;
 
     int currentCannon = 0;
 
@@ -23,7 +24,7 @@ public class HandleDualLaserCannon : MonoBehaviour
 
     public List<ParticleCollisionEvent> collisionEvents;
 
-    bool triFire = true;
+    bool triFire = false;
 
     // Start is called before the first frame update
     void Start()
@@ -109,7 +110,7 @@ public class HandleDualLaserCannon : MonoBehaviour
         int numCollisionEvents = particles.GetCollisionEvents(other, collisionEvents);
 
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        BoxTarget target = other.GetComponent<BoxTarget>(); 
+        Health target = other.GetComponent<Health>(); 
         int i = 0;
 
         while (i < numCollisionEvents)
@@ -125,7 +126,7 @@ public class HandleDualLaserCannon : MonoBehaviour
             }
             if (target)
             {
-                target.LoseHealth();
+                target.LoseHealth(damage);
             }
             i++;
         }

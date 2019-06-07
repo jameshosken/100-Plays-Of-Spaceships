@@ -28,7 +28,6 @@ public class FadeOverLife : MonoBehaviour
 
         Color col = Color.Lerp(colour, Color.black, ( (counter )/ lifetime));
 
-        print((counter) / lifetime);
 
         mat.SetColor("_EmissionColor", col);
 

@@ -9,6 +9,7 @@ public class MovingTarget : MonoBehaviour
     [SerializeField] Vector3 maxVel;
     [SerializeField] Vector3 maxSpin;
     [SerializeField] Mesh[] meshes;
+    [SerializeField] float size;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class MovingTarget : MonoBehaviour
         rb.velocity = new Vector3(Random.Range(-maxVel.x, maxVel.x), Random.Range(-maxVel.y, maxVel.y), Random.Range(-maxVel.z, maxVel.z));
         rb.AddTorque(new Vector3(Random.Range(-maxSpin.x, maxSpin.x), Random.Range(-maxSpin.y, maxSpin.y), Random.Range(-maxSpin.z, maxSpin.z)) );
 
-        transform.localScale = transform.localScale * Random.Range(0.5f, 2);
+        transform.localScale = transform.localScale * size;
     }
 
     // Update is called once per frame

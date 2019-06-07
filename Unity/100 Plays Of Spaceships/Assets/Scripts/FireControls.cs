@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class FireControls : MonoBehaviour
     [SerializeField] Transform inertia;
     [SerializeField] Transform reticule;
 
-    [SerializeField] LootAtFixed[] cannons;
+    [SerializeField] LootAtFixed[] cannonsLookAt;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +49,13 @@ public class FireControls : MonoBehaviour
         targettingDistance = d;
     }
 
+    public void SetActualTarget(Transform t)
+    {
+    
+        StickyAimCannons(t);
+    }
+
+
 
     private void FixedUpdate()
     {
@@ -63,11 +71,21 @@ public class FireControls : MonoBehaviour
 
     void AimCannons(float d)
     {
-        for (int i = 0; i < cannons.Length; i++)
+        for (int i = 0; i < cannonsLookAt.Length; i++)
         {
-            cannons[i].SetTargetDistance(d);
+            cannonsLookAt[i].SetTargetDistance(d);
         }
 
+    }
+
+    private void StickyAimCannons(Transform t)
+    {
+
+        for (int i = 0; i < cannonsLookAt.Length; i++)
+        {
+
+            cannonsLookAt[i].SetTarget(t);
+        }
     }
 
 }

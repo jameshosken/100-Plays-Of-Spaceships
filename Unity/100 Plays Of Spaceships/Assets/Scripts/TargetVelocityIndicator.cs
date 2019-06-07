@@ -29,6 +29,7 @@ public class TargetVelocityIndicator : MonoBehaviour
         cam = Camera.main;
 
         GameObject trgtTransform = new GameObject();
+        trgtTransform.name = "Targeting Assist";
         estimatedTarget = trgtTransform.transform;
 
         targettingImage = GetComponent<Image>();
@@ -57,8 +58,32 @@ public class TargetVelocityIndicator : MonoBehaviour
                 targettingImage.color = col;
                 text.color = col;
 
-                //Use relative vel
-                estimatedTarget.position = target.transform.position + (target.velocity - player.velocity) * GetLaserFlightTime();
+                //Advanced estimaton algorithm:
+
+                //Get flight time (from distance)
+                //get projected position.
+                //Get difference in flight time.
+                //Ust that as multiplier for target position based on target velocity.
+
+                float timeToTarget = GetLaserFlightTime(target.transform.position);
+                Vector3 projection = target.transform.position + (target.velocity - player.velocity) * timeToTarget;
+
+                float timeToProjection = GetLaserFlightTime(projection);
+                //projection / original
+                float projectionMultiplier = timeToProjection / timeToTarget;
+                
+                estimatedTarget.position = target.transform.position + (target.velocity - player.velocity) * projectionMultiplier * GetLaserFlightTime(target.transform.position);
+                SetDistToTarget(estimatedTarget.position);
+                SetText(distToTarget);
+
+                if (Time.frameCount % 20 == 0)
+                {
+                    print(projectionMultiplier);
+                }
+
+                //fireControls.SetActualTarget(estimatedTarget);
+                //Old Algorithm
+                estimatedTarget.position = target.transform.position + (target.velocity - player.velocity) * GetLaserFlightTime(target.transform.position);
 
                 Vector3 screenPos = cam.WorldToScreenPoint(estimatedTarget.position);
                 Vector2 screenPosV2 = new Vector2(screenPos.x, screenPos.y);
@@ -80,15 +105,24 @@ public class TargetVelocityIndicator : MonoBehaviour
         
     }
 
-    float GetLaserFlightTime()
+    void SetText(float dist)
     {
-        //Distance to trgt
-        distToTarget = Vector3.Distance(player.transform.position, target.transform.position);
+        text.text = Mathf.Round(dist).ToString();
+    }
 
-        text.text = Mathf.Round(distToTarget).ToString() ;
+    void SetDistToTarget(Vector3 trgt)
+    {
+        distToTarget = Vector3.Distance(player.transform.position, trgt);
 
-        //Laser travels distance in:
-        float timeToTarget = distToTarget / fireControls.GetLaserVelocity();
+    }
+
+    float GetLaserFlightTime(Vector3 position)
+    {
+    //Distance to trgt
+    float dist = Vector3.Distance(player.transform.position, position);
+
+    //Laser travels distance in:
+    float timeToTarget = dist / fireControls.GetLaserVelocity();
 
         return timeToTarget;
     }
