@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Clickable
   - Selectable
+  - Shootable
   layers:
   - Default
   - TransparentFX

@@ -34,11 +34,8 @@ public class HandleMouseInput : MonoBehaviour
     {
 
         if (Input.GetMouseButtonDown(0)) { 
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
-            if (Cursor.lockState == CursorLockMode.None)
+
+            if (Cursor.lockState != CursorLockMode.Locked)
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }

@@ -12,6 +12,7 @@ public class FireControls : MonoBehaviour
     [SerializeField] Transform inertia;
     [SerializeField] Transform reticule;
 
+    [SerializeField] LootAtFixed[] cannons;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,19 @@ public class FireControls : MonoBehaviour
         {
             laser.SetFiring(false);
         }
+
+        if (Input.GetKeyDown(KeyCode.T)){
+            laser.ToggleTriFire();
+        }
+
+    }
+
+   
+
+    public void SetTarget(float d)
+    {
+        AimCannons(d);
+        targettingDistance = d;
     }
 
 
@@ -41,4 +55,19 @@ public class FireControls : MonoBehaviour
         float travelTime = targettingDistance / laserVelocity;
         inertia.position = inertia.parent.position + GetComponent<Rigidbody>().velocity * travelTime;
     }
+
+    public float GetLaserVelocity()
+    {
+        return laserVelocity;
+    }
+
+    void AimCannons(float d)
+    {
+        for (int i = 0; i < cannons.Length; i++)
+        {
+            cannons[i].SetTargetDistance(d);
+        }
+
+    }
+
 }

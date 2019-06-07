@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LerpToClear : MonoBehaviour
 {
+    [SerializeField] Color hitColour;
     Image img;
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,6 @@ public class LerpToClear : MonoBehaviour
 
     public void OnHit()
     {
-        img.color = Color.red;
+        img.color = hitColour;
     }
 }

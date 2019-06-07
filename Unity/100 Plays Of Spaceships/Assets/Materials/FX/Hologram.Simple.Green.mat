@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hologram.Simple
+  m_Name: Hologram.Simple.Green
   m_Shader: {fileID: -6465566751694194690, guid: cfa77f666761afd43bfd87f1728c79b8,
     type: 3}
   m_ShaderKeywords: _EMISSION _SPECULAR_SETUP
@@ -73,7 +73,7 @@ Material:
     - _WorkflowMode: 0
     - _ZWrite: 0
     m_Colors:
-    - Color_12FE833E: {r: 0.20698164, g: 5.278032, b: 0, a: 0}
+    - Color_12FE833E: {r: 0.064180195, g: 4.7863607, b: 0.025059529, a: 0}
     - Color_E389BDF4: {r: 1.8469269, g: 1.2703254, b: 0, a: 0}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.2}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}

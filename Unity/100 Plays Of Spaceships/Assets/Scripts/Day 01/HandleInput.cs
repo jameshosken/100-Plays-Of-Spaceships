@@ -22,7 +22,7 @@ public class HandleInput : MonoBehaviour
         HandleXYZ();
         HandleThrust();
         HandleDampeners();
-        HandleCameraSwitcher();
+        //HandleCameraSwitcher();
     }
 
     private void HandleCameraSwitcher()

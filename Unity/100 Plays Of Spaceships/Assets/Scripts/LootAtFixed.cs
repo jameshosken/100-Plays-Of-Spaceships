@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LootAtFixed : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    [SerializeField] Transform reticule;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +14,14 @@ public class LootAtFixed : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.LookAt(target.position);
+
+
+        transform.LookAt(reticule.position);
+        
+    }
+
+    public void SetTargetDistance(float d)
+    {
+        reticule.localPosition = Vector3.forward * d;
     }
 }

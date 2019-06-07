@@ -24,7 +24,7 @@ public class BoxTarget : MonoBehaviour
 
     public void LoseHealth()
     {
-        health -= UnityEngine.Random.Range(10, 30);
+        health -= UnityEngine.Random.Range(25, 75);
         Debug.Log("HEALTH: " + health);
     }
 

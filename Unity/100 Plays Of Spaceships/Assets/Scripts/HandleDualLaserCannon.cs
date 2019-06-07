@@ -13,7 +13,7 @@ public class HandleDualLaserCannon : MonoBehaviour
     [SerializeField] float firingRate = 10; // Particles Per Second
 
     [SerializeField] GameObject HitFX;
-    [SerializeField] LerpToClear reticule;
+    [SerializeField] HitIndicator hitIndicator;
 
     int currentCannon = 0;
 
@@ -23,36 +23,67 @@ public class HandleDualLaserCannon : MonoBehaviour
 
     public List<ParticleCollisionEvent> collisionEvents;
 
+    bool triFire = true;
+
     // Start is called before the first frame update
     void Start()
     {
+        hitIndicator = FindObjectOfType<HitIndicator>();
         firingDelay = 1 / firingRate;
         collisionEvents = new List<ParticleCollisionEvent>();
     }
 
-    
+    public void ToggleTriFire()
+    {
+        triFire = !triFire;
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (isFiring)
         {
-            if(Time.time - firingDelay >= prevFireCheckpoint)
+            if (triFire) { 
+                if (Time.time - firingDelay*3 >= prevFireCheckpoint)
+                {
+                    Fire();
+                    prevFireCheckpoint = Time.time;
+                }
+
+            }
+            else
             {
-                Fire();
-                prevFireCheckpoint = Time.time;
+                if (Time.time - firingDelay >= prevFireCheckpoint)
+                {
+                    Fire();
+                    prevFireCheckpoint = Time.time;
+                }
             }
         }
     }
 
     private void Fire()
     {
-        Transform cannon = cannons[currentCannon];
-        particles.gameObject.transform.SetPositionAndRotation(cannon.position, cannon.rotation) ;
 
-        particles.Emit(1);
+        if (triFire)
+        {
+            for (int i = 0; i < cannons.Length; i++)
+            {
+                Transform cannon = cannons[i];
+                particles.gameObject.transform.SetPositionAndRotation(cannon.position, cannon.rotation);
 
-        currentCannon = (currentCannon + 1) % cannons.Length;
+                particles.Emit(1);
+            }
+        }
+        else
+        {
+            currentCannon = (currentCannon + 1) % cannons.Length;
+
+            Transform cannon = cannons[currentCannon];
+            particles.gameObject.transform.SetPositionAndRotation(cannon.position, cannon.rotation);
+
+            particles.Emit(1);
+        }
 
     }
 
@@ -83,13 +114,13 @@ public class HandleDualLaserCannon : MonoBehaviour
 
         while (i < numCollisionEvents)
         {
-            reticule.OnHit();
+            hitIndicator.GetComponent<LerpToClear>().OnHit();
             Instantiate(HitFX, collisionEvents[i].intersection, Quaternion.identity);
 
             if (rb)
             {
                 Vector3 pos = collisionEvents[i].intersection;
-                Vector3 force = collisionEvents[i].velocity * 10;
+                Vector3 force = collisionEvents[i].velocity;
                 rb.AddForce(force);
             }
             if (target)
