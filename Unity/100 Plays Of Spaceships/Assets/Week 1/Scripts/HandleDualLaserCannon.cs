@@ -109,6 +109,7 @@ public class HandleDualLaserCannon : MonoBehaviour
     {
         int numCollisionEvents = particles.GetCollisionEvents(other, collisionEvents);
 
+
         Rigidbody rb = other.GetComponent<Rigidbody>();
         Health target = other.GetComponent<Health>(); 
         int i = 0;

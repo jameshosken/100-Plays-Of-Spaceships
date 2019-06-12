@@ -18,7 +18,7 @@ public class TargetSpawner : MonoBehaviour
             float x = Random.Range(-bounds, bounds);
             float y = Random.Range(-bounds, bounds);
             float z = Random.Range(-bounds, bounds);
-            clone.transform.position = new Vector3(x, y, z);
+            clone.transform.position = new Vector3(x, y, z) + transform.position;
 
             clone.transform.rotation = Quaternion.Euler(x, y, z);
 
@@ -36,7 +36,7 @@ public class TargetSpawner : MonoBehaviour
             float x = Random.Range(-bounds, bounds);
             float y = Random.Range(-bounds, bounds);
             float z = Random.Range(-bounds, bounds);
-            clone.transform.position = new Vector3(x, y, z);
+            clone.transform.position = new Vector3(x, y, z) + transform.position;
 
             clone.transform.rotation = Quaternion.Euler(x, y, z);
 
