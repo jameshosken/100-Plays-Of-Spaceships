@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IgnorePhysics : MonoBehaviour
+public class IgnorePhysicsInChildren : MonoBehaviour
 {
 
     Collider[] colliders;
