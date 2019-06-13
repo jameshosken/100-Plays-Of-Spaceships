@@ -22,14 +22,14 @@ public class SimpleRTSCamera : MonoBehaviour
     void Update()
     {
         float x = Input.GetAxis("Horizontal") * multiplier;
-        float y = Input.GetAxis("Mouse ScrollWheel")*-5;
+        float y = Input.GetAxis("Mouse ScrollWheel")*-10;
         float z = Input.GetAxis("Vertical") * multiplier;
 
         if (transform.position.y < minY)
         {
             y = .1f;
         }
-        shift = Vector3.Lerp(shift, new Vector3(x, y, z), damp);
+        shift = Vector3.Lerp(shift, new Vector3(x, y, z), damp * Time.deltaTime);
 
         transform.Translate(new Vector3(shift.x, 0, shift.z), Space.Self);
         cam.transform.localPosition += new Vector3(0, 0, -shift.y);
@@ -45,8 +45,8 @@ public class SimpleRTSCamera : MonoBehaviour
             rot = -10;
         }
 
-        rShift = Mathf.Lerp(rShift, rot, damp);
-        transform.Rotate(Vector3.up, rShift * multiplier);
+        rShift = Mathf.Lerp(rShift, rot, damp * Time.deltaTime);
+        transform.Rotate(Vector3.up, rShift * multiplier * Time.deltaTime);
 
     }
 }

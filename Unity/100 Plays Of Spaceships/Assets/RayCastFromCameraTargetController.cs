@@ -26,7 +26,7 @@ public class RayCastFromCameraTargetController : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
 
-        hits = Physics.RaycastAll(ray, 200, layerMask);
+        hits = Physics.RaycastAll(ray, 500, layerMask);
         RaycastHit priorityHit = new RaycastHit();
         int currentLayer = 100;
 

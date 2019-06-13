@@ -8,28 +8,23 @@ public class RaycastSelectionController : MonoBehaviour
 {
     RayCastFromCameraTargetController caster;
 
-    GameObject selected;
-    [SerializeField] GameObject target;
+    List<GameObject> selectedObjects = new List<GameObject>();
 
-    [SerializeField] GameObject selectionIcon;
+    [SerializeField] GameObject target;
+    [SerializeField] float separationRadius = 10f;
+    
 
     Vector3 targetPosition = Vector3.zero;
     void Start()
     {
         caster = GetComponent<RayCastFromCameraTargetController>();
-        selectionIcon = Instantiate(selectionIcon);
-        selectionIcon.SetActive(false);
     }
     
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (caster.IsRayCastHit())
-            {
-                handleSelectionClick();
-                
-            }
+                handleSelectionClick();   
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -41,29 +36,85 @@ public class RaycastSelectionController : MonoBehaviour
         }
     }
 
+    private void handleSelectionClick()
+    {
+        if (caster.IsRayCastHit())
+        {
+            GameObject selected = caster.GetRaycastHitObject();
+
+            if (selected.tag == "Selectable")
+            {
+
+                if (selectedObjects.Contains(selected))
+                {
+                    SetRTSSelection(selected, false);
+                    selectedObjects.Remove(selected);
+                }
+                else
+                {
+                    SetRTSSelection(selected, true);
+                    selectedObjects.Add(selected);
+                }
+
+                
+                return;
+            }
+            else
+            {
+                ClearSelection();
+            }
+            
+        }
+        else
+        {
+            ClearSelection();
+        }
+    }
+
+    void ClearSelection()
+    {
+        foreach (GameObject sel in selectedObjects)
+        {
+            SetRTSSelection(sel, false);
+        }
+        selectedObjects.Clear();
+    }
+
     private void HandleSecondaryClick()
     {
         targetPosition = caster.GetRaycastHitPoint();
-        if (selected.GetComponentInParent<TeleportToTarget>())
+
+        for (int i = 0; i < selectedObjects.Count; i++)
         {
-            selected.transform.LookAt(targetPosition, selected.transform.up);
-            selected.GetComponentInParent<TeleportToTarget>().SetNewPosition(targetPosition);
-            selected = null;
-            selectionIcon.SetActive(false);
-        }
+            GameObject selected = selectedObjects[i];
+
+            if (selected.GetComponentInParent<RTSUnitController>())
+            {
+                Vector3 offset =  ConstructNSidedPolygon(i);
+                selected.GetComponentInParent<RTSUnitController>().SetMovementTarget(targetPosition+offset);
+            }
+        }   
     }
 
-    private void handleSelectionClick()
+    private Vector3 ConstructNSidedPolygon(int n)
     {
+        float r = separationRadius * selectedObjects.Count;
+        float x = r * Mathf.Cos(2f * Mathf.PI * (float)n / selectedObjects.Count);
+        float y = r * Mathf.Sin(2f * Mathf.PI * (float)n / selectedObjects.Count);
 
-        selected = caster.GetRaycastHitObject();
-        if (selected.tag != "Selectable")
-        {
-            selected = null;
-            return;
-        }
-        selectionIcon.transform.parent = selected.transform;
-        selectionIcon.transform.localPosition = Vector3.zero;
-        selectionIcon.SetActive(true);
+
+        return new Vector3(x, 0, y);
     }
+
+    private void SetRTSSelection(GameObject selected, bool _b)
+    {
+        if (selected.GetComponent<RTSUnitController>())
+        {
+            selected.GetComponent<RTSUnitController>().SetSelection(_b);
+        }
+    }
+
+
+
+
 }
