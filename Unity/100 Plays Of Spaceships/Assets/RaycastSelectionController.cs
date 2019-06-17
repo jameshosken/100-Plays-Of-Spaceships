@@ -82,6 +82,9 @@ public class RaycastSelectionController : MonoBehaviour
 
     private void HandleSecondaryClick()
     {
+
+        
+
         targetPosition = caster.GetRaycastHitPoint();
 
         for (int i = 0; i < selectedObjects.Count; i++)
@@ -93,7 +96,8 @@ public class RaycastSelectionController : MonoBehaviour
                 Vector3 offset =  ConstructNSidedPolygon(i);
                 selected.GetComponentInParent<RTSUnitController>().SetMovementTarget(targetPosition+offset);
             }
-        }   
+        }
+        ClearSelection();
     }
 
     private Vector3 ConstructNSidedPolygon(int n)
