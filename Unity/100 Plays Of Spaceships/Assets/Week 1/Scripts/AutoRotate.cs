@@ -24,4 +24,9 @@ public class AutoRotate : MonoBehaviour
     {
         gameObject.transform.Rotate(speed * Time.deltaTime, Space.Self);
     }
+
+    public void SetRotation(Vector3 rot)
+    {
+        speed = rot;
+    }
 }

@@ -14,18 +14,31 @@ public class FadeLine : MonoBehaviour
         killer = GetComponent<DestroyAfterTime>();
         line = GetComponent<LineRenderer>();
 
-        fader = Random.Range(0.01f, 0.1f);
+        fader = Random.Range(1f, 2f);
+
     }
 
     // Update is called once per frame
     void Update()
     {
         Color lineStartColour = line.startColor;
-        Color startLerper = Color.Lerp(lineStartColour, Color.clear, fader);
 
         Color lineEndColour = line.endColor;
-        Color endLerper = Color.Lerp(lineEndColour, Color.clear, fader*0.5f);
+        if(lineStartColour.grayscale < .2f)
+        {
+            lineStartColour = Color.clear;
+            lineEndColour = Color.clear;
+        }
+
+        Color startLerper = Color.Lerp(lineStartColour, Color.clear, fader * Time.deltaTime);
+        Color endLerper = Color.Lerp(lineEndColour, Color.clear, fader * Time.deltaTime);
+
         line.startColor = startLerper;
         line.endColor = endLerper;
+
+        //float width = line.widthMultiplier;
+        //line.widthMultiplier = Mathf.Lerp(width, 0, fader);
+
+
     }
 }

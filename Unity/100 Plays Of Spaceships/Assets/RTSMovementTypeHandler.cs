@@ -5,17 +5,23 @@ using UnityEngine;
 
 public class RTSMovementTypeHandler : MonoBehaviour
 {
+
+    enum EngineState { Off, Impulse, Warp };
+
     [SerializeField] float turnSpeed = 0.1f;
     [SerializeField] float jumpAccuracy = 0.95f;
-    [SerializeField] GameObject teleportLines;
+    [SerializeField] EngineState engine = EngineState.Impulse;
+    //TeleportToTarget teleporter;
 
     Rigidbody rb = null;
+
     
-   
     
     // Start is called before the first frame update
     void Start()
     {
+        //teleporter = GetComponent<TeleportToTarget>();
+
         if (GetComponent<Rigidbody>())
         {
             rb = GetComponent<Rigidbody>();
@@ -31,14 +37,26 @@ public class RTSMovementTypeHandler : MonoBehaviour
 
     public void SetMoveTarget(Vector3 _t)
     {
-        StopCoroutine("TeleportTo");
-        StartCoroutine("TeleportTo", _t);
+        if (engine == EngineState.Warp)
+        {
+            StopCoroutine("TurnAndJump");
+            StartCoroutine("TurnAndJump", _t);
+        }
+        else if(engine == EngineState.Impulse)
+        {
+            BroadcastMessage("BeginImpulseSequence", _t);
+        }
 
-
+        
     }
 
-    IEnumerator TeleportTo(Vector3 _t)
+    
+
+
+    IEnumerator TurnAndJump(Vector3 _t)
     {
+
+        BroadcastMessage("BeginTurnSequence", _t);
         Vector3 lookVector = _t - transform.position;
         Quaternion rot = Quaternion.LookRotation(lookVector, transform.up);
         //While transform not looking at target:
@@ -52,22 +70,25 @@ public class RTSMovementTypeHandler : MonoBehaviour
             //Look towards target
             lookVector = _t - transform.position;
             rot = Quaternion.LookRotation(lookVector, transform.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, turnSpeed * Time.deltaTime) ;
-
+            transform.rotation = Quaternion.Lerp(transform.rotation, rot, turnSpeed * Time.deltaTime) ;
             
             yield return null;
         }
+        
 
-        CreateLines(_t, transform.position);
-        transform.position = _t;
+        //Once lined up to target, begin jump sequence
+        BroadcastMessage("BeginJumpSequence", _t);
+
+        //Point to target padding
+        for (int i = 0; i < 30; i++)
+        {
+            lookVector = _t - transform.position;
+            rot = Quaternion.LookRotation(lookVector, transform.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rot, .1f);
+            yield return new WaitForSeconds(0.01f);
+        }
         yield return null;
     }
 
-    private void CreateLines(Vector3 _t, Vector3 pos)
-    {
-        GameObject lineObj = Instantiate(teleportLines) as GameObject;
-        TeleportLinesController lineController = lineObj.GetComponent<TeleportLinesController>();
-        lineController.SetLineStart(pos);
-        lineController.SetLineEnd(_t);
-    }
+    
 }

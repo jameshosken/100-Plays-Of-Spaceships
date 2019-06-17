@@ -7,6 +7,9 @@ public class SimpleRTSCamera : MonoBehaviour
     [SerializeField] float multiplier = 0.5f;
     [SerializeField] float minY = -10;
     [SerializeField] float damp = 0.1f;
+    [SerializeField] float zoomMultiplier = 1f;
+
+    [SerializeField] Transform camPivot;
 
     Camera cam;
 
@@ -22,7 +25,7 @@ public class SimpleRTSCamera : MonoBehaviour
     void Update()
     {
         float x = Input.GetAxis("Horizontal") * multiplier;
-        float y = Input.GetAxis("Mouse ScrollWheel")*-10;
+        float y = Input.GetAxis("Mouse ScrollWheel")*-10 * zoomMultiplier;
         float z = Input.GetAxis("Vertical") * multiplier;
 
         if (transform.position.y < minY)
@@ -38,15 +41,39 @@ public class SimpleRTSCamera : MonoBehaviour
 
         float rot = 0;
         if (Input.GetKey(KeyCode.Q)){
-            rot = 10;
+            rot = 50;
         }
 
         if (Input.GetKey(KeyCode.E)){
-            rot = -10;
+            rot = -50;
         }
 
         rShift = Mathf.Lerp(rShift, rot, damp * Time.deltaTime);
         transform.Rotate(Vector3.up, rShift * multiplier * Time.deltaTime);
 
+        if (Input.GetMouseButtonDown(2))
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        if (Input.GetMouseButtonUp(2))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+
+        if (Input.GetMouseButton(2))
+        {
+            Vector3 rotateX = new Vector3(Input.GetAxis("Mouse Y"), 0, 0);
+            Vector3 rotateY = new Vector3(0, -Input.GetAxis("Mouse X"), 0);
+            camPivot.Rotate(rotateX);
+            transform.Rotate(rotateY);
+
+
+
+
+        }
     }
 }
