@@ -19,7 +19,6 @@ public class HandleMouseInput : MonoBehaviour
     }
 
 
-
     void FixedUpdate()
     {
         HandleMouseLock();
