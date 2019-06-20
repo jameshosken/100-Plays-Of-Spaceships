@@ -12,22 +12,37 @@ public class SkyboxHandler : MonoBehaviour
     void Start()
     {
         RenderSettings.skybox = materials[0];
+        SetSkyboxIntensity(1);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SetSkyboxByIndex(c);
-            c = (c + 1) % materials.Length;
-        }
+
     }
 
-    void SetSkyboxByIndex(int i)
+    public int GetNumberOfSkyboxes()
+    {
+        return materials.Length;
+    }
+
+    public void SetSkyboxByIndex(int i)
     {
         if (i >= 0 && i < materials.Length)
         {
             RenderSettings.skybox = materials[i];
         }
+    }
+
+    public void SetSkyboxIntensity(float i)
+    {
+        RenderSettings.skybox.SetFloat("_Exposure", i);
+
+    }
+
+    public void SetNoSkybox()
+    {
+
+        RenderSettings.skybox = null;
+
     }
 }

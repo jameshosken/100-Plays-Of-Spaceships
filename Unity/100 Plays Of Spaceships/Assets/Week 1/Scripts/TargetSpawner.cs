@@ -8,6 +8,8 @@ public class TargetSpawner : MonoBehaviour
     [SerializeField] float waveRate = 30;
     [SerializeField] float bounds;
     [SerializeField] GameObject target;
+
+    [SerializeField] bool repeating = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,11 +25,13 @@ public class TargetSpawner : MonoBehaviour
             clone.transform.rotation = Quaternion.Euler(x, y, z);
 
         }
-
-        InvokeRepeating("Spawn", waveRate, waveRate);
+        if (repeating)
+        {
+            InvokeRepeating("Spawn", waveRate, waveRate);
+        }
     }
 
-    void Spawn()
+    public void Spawn()
     {
         for (int i = 0; i < numberOfTargets; i++)
         {
@@ -39,7 +43,6 @@ public class TargetSpawner : MonoBehaviour
             clone.transform.position = new Vector3(x, y, z) + transform.position;
 
             clone.transform.rotation = Quaternion.Euler(x, y, z);
-
 
         }
     }

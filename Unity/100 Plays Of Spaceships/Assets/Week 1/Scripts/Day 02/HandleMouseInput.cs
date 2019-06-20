@@ -6,27 +6,60 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HandleMouseInput : MonoBehaviour
-{
+{   
+
     SimpleMouseMotionControl motionControl;
     //ControlFeedbackDisplay controls;
 
     [SerializeField] bool displayArrows = false;
+    [SerializeField] bool useWarp = true;
+
+
+    WarpJumpControllerCockpit warper;
+
+    bool controlsLocked = false;
 
     void Start()
     {
         motionControl = GetComponent<SimpleMouseMotionControl>();
         //controls = GetComponent<ControlFeedbackDisplay>();
+        
+    }
+    private void Awake()
+    {
+        warper = FindObjectOfType<WarpJumpControllerCockpit>();
     }
 
 
     void FixedUpdate()
     {
+        if (controlsLocked)
+        {
+            return;
+        }
+
         HandleMouseLock();
         HandlePRY();
         HandleXYZ();
         HandleThrust();
         HandleDampeners();
         HandleCameraSwitcher();
+        if (useWarp)
+        {
+            HandleWarp();
+        }
+    }
+    public void SetControlLock(bool s)
+    {
+        controlsLocked = s;
+    }
+
+    private void HandleWarp()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            warper.InitiateWarp();
+        }
     }
 
     private void HandleMouseLock()
@@ -72,7 +105,7 @@ public class HandleMouseInput : MonoBehaviour
     void HandlePRY()
     {
         float yaw = Input.GetAxis("Mouse X") ;
-        float pitch = Input.GetAxis("Mouse Y") ;
+        float pitch = Input.GetAxis("Mouse Y");
         float roll = Input.GetAxis("Horizontal");
         motionControl.HandlePRY(pitch, roll, yaw);
 
