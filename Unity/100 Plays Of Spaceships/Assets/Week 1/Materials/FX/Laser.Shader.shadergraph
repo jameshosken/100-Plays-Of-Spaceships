@@ -4,12 +4,9 @@
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.ColorShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Name\": \"Color\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"f1ab8957-7931-4f42-a1e6-448ddf8c1b0c\"\n    },\n    \"m_DefaultReferenceName\": \"Color_27EA92C7\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_Value\": {\n        \"r\": 1.0,\n        \"g\": 1.0,\n        \"b\": 1.0,\n        \"a\": 0.0\n    },\n    \"m_ColorMode\": 1,\n    \"m_Hidden\": false\n}"
+            "JSONnodeData": "{\n    \"m_Name\": \"Color\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"f1ab8957-7931-4f42-a1e6-448ddf8c1b0c\"\n    },\n    \"m_DefaultReferenceName\": \"Color_27EA92C7\",\n    \"m_OverrideReferenceName\": \"_Color\",\n    \"m_Value\": {\n        \"r\": 1.0,\n        \"g\": 1.0,\n        \"b\": 1.0,\n        \"a\": 0.0\n    },\n    \"m_ColorMode\": 1,\n    \"m_Hidden\": false\n}"
         }
     ],
-    "m_GUID": {
-        "m_GuidSerialized": "6e79f1fc-c609-4ec8-acf8-d8807c549ae3"
-    },
     "m_SerializableNodes": [
         {
             "typeInfo": {
