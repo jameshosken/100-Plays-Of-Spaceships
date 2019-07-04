@@ -1,36 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class TopDownShooterGameEngine : MonoBehaviour
 {
 
-    [SerializeField] GameObject target;
-    [SerializeField] float timeBetweenWaves;
-    [SerializeField] Vector3 targetSpeed;
-    [SerializeField] int targetsPerSpawn;
+    [SerializeField] private GameObject target;
+    [SerializeField] private float timeBetweenWaves;
+    [SerializeField] private Vector3 targetSpeed;
+    [SerializeField] Vector3 speedIncrement;
+    [SerializeField] private int targetsPerSpawn;
 
-    [SerializeField] float xRange = 40;
-    [SerializeField] float zRange = 6;
+    [SerializeField] private float xRange = 40;
+    [SerializeField] private float zRange = 6;
 
-    [SerializeField] GameObject loseMessage;
+    [SerializeField] private GameObject loseMessage;
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         InvokeRepeating("SpawnWave", 2f, timeBetweenWaves);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+
     }
 
-    void SpawnWave()
+    private void SpawnWave()
     {
         for (int i = 0; i < targetsPerSpawn; i++)
         {
@@ -41,11 +39,24 @@ public class TopDownShooterGameEngine : MonoBehaviour
 
             clone.transform.Translate(Random.Range(-xRange, xRange), 0, Random.Range(-zRange, zRange));
 
-            clone.GetComponent<AutoMove>().SetMoveVector(targetSpeed * Random.Range(.9f,1.3f));
+
+            
+            if(Random.Range(0,100) < 20)
+            {
+                targetSpeed.x = Random.Range(-10, 10);
+            }
+            else
+            {
+                targetSpeed.x = 0;
+            }
+            clone.GetComponent<AutoMove>().SetMoveVector(targetSpeed * Random.Range(.9f, 1.5f));
+
+            
         }
-        targetsPerSpawn++;
-        targetSpeed *= 1.1f;
-        
+
+        targetSpeed +=  speedIncrement;
+
+
     }
 
     public void OnLose()
@@ -55,7 +66,7 @@ public class TopDownShooterGameEngine : MonoBehaviour
         Invoke("ResetGame", 3);
     }
 
-    void ResetGame()
+    private void ResetGame()
     {
         SceneManager.LoadScene(0);
     }

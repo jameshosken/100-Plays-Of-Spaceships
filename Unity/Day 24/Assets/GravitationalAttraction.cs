@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class GravitationalAttraction : MonoBehaviour
 {
-    [SerializeField] GravitationalAttractor attractor;
+    [SerializeField] GravitationalAttractor[] attractors;
     [SerializeField] Vector3 initial;
     [SerializeField] float gravitationalConstant = .1f;
 
+    GravitationalAttractor currentAttractor = null;
 
     Rigidbody body;
 
@@ -18,11 +19,6 @@ public class GravitationalAttraction : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         body.velocity = initial;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     private void FixedUpdate()
@@ -52,13 +48,30 @@ public class GravitationalAttraction : MonoBehaviour
 
     public Vector3 GetForceAtPosition(Vector3 position)
     {
-        Vector3 forceVector = attractor.transform.position - position;
+
+        float minDist = 10000;
+        int index = -1;
+        for (int i = 0; i < attractors.Length; i++)
+        {
+            float checkDist = Vector3.Distance(position, attractors[i].transform.position);
+            float checkDistSOI = checkDist * attractors[i].GetSOI();
+
+            if (checkDist < minDist)
+            {
+                minDist = checkDist;
+                index = i;
+            }
+        }
+
+        currentAttractor = attractors[index];
+
+        Vector3 forceVector = currentAttractor.transform.position - position;
 
         forceVector = forceVector.normalized;
 
-        float dist = Vector3.Distance(position, attractor.transform.position);
+        float dist = minDist;
 
-        float force = gravitationalConstant * (body.mass * attractor.GetMass() / (dist * dist));
+        float force = gravitationalConstant * (body.mass * currentAttractor.GetMass() / (dist * dist));
         forceVector *= force;
 
         return forceVector;
@@ -66,8 +79,23 @@ public class GravitationalAttraction : MonoBehaviour
 
     
 
-    public Vector3 GetAttractorPosition()
+    public Vector3 GetClosestAttractor(Vector3 position)
     {
-        return attractor.transform.position;
+
+        float minDist = 10000;
+        int index = -1;
+        for (int i = 0; i < attractors.Length; i++)
+        {
+            float checkDist = Vector3.Distance(position, attractors[i].transform.position);
+            float checkDistSOI = checkDist * attractors[i].GetSOI();
+
+            if (checkDistSOI < minDist)
+            {
+                minDist = checkDistSOI;
+                index = i;
+            }
+        }
+
+        return attractors[index].transform.position;
     }
 }

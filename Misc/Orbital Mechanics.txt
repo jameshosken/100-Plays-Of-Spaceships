@@ -1,0 +1,65 @@
+Conic Section - plane intersection of a one that describes a circle, ellipse, parabola, or hyperbola
+
+
+Orbital Elements:
+- Semi-Major Axis - 1,
+- Eccentricity -e, 
+- Inclination - i,
+- Argument of Periapses - w,
+- Time of Periapsis Passage - T,
+- Longitude of Ascending Node - Omega
+
+- Period P = time to complete one orbit
+- True Anomaly = Angular distance from point in orbit past the Periapsis
+
+
+e = dist(foci) / major Axis
+
+i = angular distance between orbital plane and equator or ecliptic plane
+
+periapsis = point closest to primary
+apoapsis = point furthest from primary
+
+Argument of Periapsis = angular distance between ascending Node and point of periapsis
+
+Time of Periapses = time in which satellite moves through periapsis
+
+Node = point where orbit crosses plane
+    South to North = ascending Node
+
+
+# Circular Motion
+
+Constant acceleration inwards (centripetal), described by:
+
+a = v^2 / r (thus F = m*v^2 / r)
+
+v^2 / r = G*M / r^2 
+
+v = sqrt(G * M / r)
+
+
+
+
+Basic equation of planetary motion
+p^2 = 4*PI^2*r^3 / GM
+
+    Holds for ellipses if r is semi-major axis
+
+
+
+---
+READ THIS:
+Stack: https://space.stackexchange.com/questions/8911/determining-orbital-position-at-a-future-point-in-time
+---
+
+For hyperbolics:
+ℓ = "width" of orbit
+ℓ=a(1−e2).
+
+Things we must determine:
+
+- a (or ℓ)
+- e (eccentricity)
+- periapsis - rp=a(1−e)
+- apoapsis  - ra=a(1+e)

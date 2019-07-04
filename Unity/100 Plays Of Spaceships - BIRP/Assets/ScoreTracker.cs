@@ -27,4 +27,11 @@ public class ScoreTracker : MonoBehaviour
         scoreText.text = "Score: " + score.ToString();
     }
 
+    public void HalveScore()
+    {
+        score = score / 2;
+
+        scoreText.text = "Score: " + score.ToString();
+    }
+
 }

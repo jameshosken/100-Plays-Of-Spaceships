@@ -25,6 +25,7 @@ public class OrbitTrajectoryCalculator : MonoBehaviour
     /// next position = current position + current velocity + force
     /// </summary>
     /// 
+
     [SerializeField] int predictions = 10;
     [SerializeField] float predictionStep = 1f;
 
@@ -32,6 +33,7 @@ public class OrbitTrajectoryCalculator : MonoBehaviour
     [SerializeField] Transform periapsis;
 
     [SerializeField] bool showApsis = false;
+
 
     LineRenderer lineRenderer;
     Rigidbody body;
@@ -64,17 +66,18 @@ public class OrbitTrajectoryCalculator : MonoBehaviour
 
         Vector3 maxPos = Vector3.zero;
         Vector3 minPos = Vector3.zero;
-        Vector3 attractor = grav.GetAttractorPosition();
+        Vector3 attractor = grav.GetClosestAttractor(transform.position);
 
         double maxDistance = double.MinValue;
         double minDistance = double.MaxValue;
 
-        for (int i = predictions / 2; i < predictions; i++)
+        for (int i = predictions * 1 / 4 ; i < predictions; i++)
         {
             Vector3 predictedforce = grav.GetForceAtPosition(predictedPosition);
 
             predictedVelocity = predictedVelocity + predictedforce * predictionStep;
             predictedPosition = predictedPosition + predictedVelocity  * predictionStep;
+
 
             double dist = Vector3.Distance(predictedPosition, attractor);
 
@@ -94,7 +97,7 @@ public class OrbitTrajectoryCalculator : MonoBehaviour
         predictedPosition = transform.position;
         predictedVelocity = -body.velocity;
 
-        for (int i = (predictions/2)-1; i >= 0; i--)
+        for (int i = (predictions*1/4)-1; i >= 0; i--)
         {
             Vector3 predictedforce = grav.GetForceAtPosition(predictedPosition);
 
