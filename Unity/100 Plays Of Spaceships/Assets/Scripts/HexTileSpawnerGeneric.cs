@@ -21,7 +21,6 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
     private List<GameObject> tiles = new List<GameObject>();
     private Vector3 previousViewerPosition = Vector3.zero;
-    private List<int[]> tileCoordinates = new List<int[]>();
 
     // Start is called before the first frame update
     private void Start()
@@ -45,8 +44,8 @@ public class HexTileSpawnerGeneric : MonoBehaviour
         if (movedDistance > newTileThreshold)
         {
             previousViewerPosition = viewer.position;
-            GenerateTilesAroundLocation(viewer.position, 5f);
-            RemoveTilesAroundLocation(viewer.position, 5f);
+            GenerateTilesAroundLocation(viewer.position);
+            RemoveTilesAroundLocation(viewer.position);
         }
     }
 
@@ -61,26 +60,31 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
         GameObject tile = Instantiate(hexTile) as GameObject;   
 
+        // Get the hexTile handler script on the tile object:
         HexTileBase hexTileBase = tile.GetComponent<HexTileBase>();
         hexTileBase.SetCoords(x, y);
 
+        //Set tile's position in the world based on coordinates:
         tile.transform.position = CoordToPoint(x, y);
 
+        //Name the tile for the outliner
         string name = x.ToString() + ", " + y.ToString();
         tile.name = name;
 
         hexTileBases.Add(hexTileBase);
-        tileCoordinates.Add(new int[] { x, y });
 
     }
 
-    private void GenerateTilesAroundLocation(Vector3 location, float radius)
+    private void GenerateTilesAroundLocation(Vector3 location)
     {
 
         //Convert player location to nearest grid coordinates:
         int[] coords = PointToGridCoords(location);
 
+        //Setarbitrarily large grid within which to generate tiles:
         int bounds = 10;
+
+
         for (int x = -bounds; x < bounds; x++)
         {
             for (int y = -bounds; y < bounds; y++)
@@ -90,8 +94,10 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
                 float dist = CoordinateDistance(xOff, yOff, coords[0], coords[1]);
 
+                //If point is within threshold for new tile:
                 if (dist < spawnRadius)
                 {
+                    //Check if a tile exists at this coordinate:
                     if (CheckTile(xOff, yOff))
                     {
                         //If tile exists, do nothing
@@ -107,16 +113,19 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
 
 
-    private void RemoveTilesAroundLocation(Vector3 position, float v)
+    private void RemoveTilesAroundLocation(Vector3 position)
     {
+
+        //This function removes tiles further than 'removeRadius' from a certain world position
+
+        //Check through all tiles in the list:
         for (int i = hexTileBases.Count-1; i >=0; i--)
         {
-
+            //If distance is greater than remove threshold, remove the tile:
             if (Vector3.Distance(viewer.position, hexTileBases[i].gameObject.transform.position) > removeRadius)
             {
                 HexTileBase tileBase = hexTileBases[i];
                 hexTileBases.RemoveAt(i);
-                tileCoordinates.RemoveAt(i);
                 GameObject.Destroy(tileBase.gameObject);
             }
         }
@@ -124,6 +133,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
     private bool CheckTile(int x, int y)
     {
+        //This function checks if a tile exists at a coordinate 
 
         int[] coord = { x, y };
 
@@ -154,6 +164,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
     private Vector3 CoordToPoint(int x, int y)
     {
+        //This function converts a grid coordinate into a world space position
 
         float w = tileRadius * Mathf.Sqrt(3);
         float h = tileRadius * 2f;
@@ -168,6 +179,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
     private int[] PointToGridCoords(Vector3 point)
     {
+        //This function converts any world space to the closest grid coordinate.
 
         float w = tileRadius * Mathf.Sqrt(3);
         float h = tileRadius * 2f;
