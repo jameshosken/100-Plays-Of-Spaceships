@@ -70,7 +70,7 @@ public class DysonRingSelectionController : MonoBehaviour
 
                 hovered = newTile;
 
-                if (selecting)
+                if (selecting && hovered.isSelected == false)
                 {
                     
                     hovered.SetSelection(true);

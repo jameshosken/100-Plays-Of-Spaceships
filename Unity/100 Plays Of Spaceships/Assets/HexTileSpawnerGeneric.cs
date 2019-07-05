@@ -26,6 +26,8 @@ public class HexTileSpawnerGeneric : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+
+        //Start with a small grid of tiles
         for (int y = -2; y < 2; y++)
         {
             for (int x = -2; x < 2; x++)
@@ -57,7 +59,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
         // Size = middle to corner = 1;
         // w = sqrt(3) * size and height h = 2 * size
 
-        GameObject tile = Instantiate(hexTile) as GameObject;
+        GameObject tile = Instantiate(hexTile) as GameObject;   
 
         HexTileBase hexTileBase = tile.GetComponent<HexTileBase>();
         hexTileBase.SetCoords(x, y);
@@ -75,7 +77,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
     private void GenerateTilesAroundLocation(Vector3 location, float radius)
     {
 
-        //Convert point to grid coords:
+        //Convert player location to nearest grid coordinates:
         int[] coords = PointToGridCoords(location);
 
         int bounds = 10;
@@ -90,13 +92,12 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 
                 if (dist < spawnRadius)
                 {
-                    if (checkTile(xOff, yOff))
+                    if (CheckTile(xOff, yOff))
                     {
-
+                        //If tile exists, do nothing
                     }
                     else
                     {
-                        
                         GenerateTile(xOff, yOff);
                     }
                 }
@@ -121,7 +122,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
         }
     }
 
-    private bool checkTile(int x, int y)
+    private bool CheckTile(int x, int y)
     {
 
         int[] coord = { x, y };
@@ -132,6 +133,7 @@ public class HexTileSpawnerGeneric : MonoBehaviour
             int cx = c[0];
             int cy = c[1];
 
+            //If a tile exists at this X and Y coord, return true
             if(cx == x && cy == y)
             {
                 return true;
@@ -140,14 +142,6 @@ public class HexTileSpawnerGeneric : MonoBehaviour
         }
         return false;
 
-        if (tileCoordinates.Contains(coord))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     private float CoordinateDistance(int x1, int y1, int x2, int y2)

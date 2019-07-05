@@ -19,8 +19,8 @@ public class DysonRingInnerCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float rotation = Input.GetAxis("Horizontal") * rotationMultiplier;
-        float height = Input.GetAxis("Vertical") * heightMultiplier;
+        float rotation = Input.GetAxis("Horizontal") * rotationMultiplier * Time.deltaTime;
+        float height = Input.GetAxis("Vertical") * heightMultiplier * Time.deltaTime;
 
         float y = Input.GetAxis("Mouse ScrollWheel") * zoomMultiplier;
 

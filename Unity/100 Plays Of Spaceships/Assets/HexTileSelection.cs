@@ -8,6 +8,8 @@ public class HexTileSelection : MonoBehaviour
     [ColorUsage(true, true)]
     [SerializeField] Color selectionColour;
 
+    [SerializeField] GameObject demoCube;
+
     public bool isHovered = false;
     public bool isSelected = false;
 
@@ -38,9 +40,18 @@ public class HexTileSelection : MonoBehaviour
 
     public void SetSelection(bool status)
     {
+
         selectionIndicator.SetActive(status);
         selectionRenderer.materials[0].SetColor("_EmissionColor", selectionColour); ;
         isSelected = status;
+
+        if (status == true)
+        {
+            GameObject cln = Instantiate(demoCube) as GameObject;
+            cln.transform.position = transform.position + transform.up * Random.Range(10, 50);
+            cln.transform.Rotate(new Vector3(Random.Range(0, 90), Random.Range(0, 90), Random.Range(0, 90)));
+
+        }
     }
 
 }

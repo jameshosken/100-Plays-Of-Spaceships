@@ -54,6 +54,8 @@ public class DysonRingHexGenerator : MonoBehaviour
 
                 GameObject tile = Instantiate(hexTile) as GameObject;
 
+                tile.transform.parent = transform;
+
                 float zpos =  h * tileH * 3 / 4 ;
                 tile.transform.position = new Vector3(x, zpos, y);
                 tile.transform.localScale = Vector3.one * tileSize;
