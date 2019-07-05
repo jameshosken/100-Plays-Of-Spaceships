@@ -5,22 +5,17 @@ using UnityEngine;
 public class HexTileSpawnerGeneric : MonoBehaviour
 {
 
-    [SerializeField] private GameObject hexTile;
+    [SerializeField] private GameObject hexTile;        //Tile prefab
+    [SerializeField] private float tileRadius = 1       //Radius of tile;
 
-    //[SerializeField] private int gridHeight;
-    //[SerializeField] private int gridWidth;
-
-    [SerializeField] private float spawnRadius;
-    [SerializeField] float removeRadius;
-    [SerializeField] private float tileRadius = 1;
-
-    // For later (dynamics)
     [SerializeField] private Transform viewer;
-    [SerializeField] private float newTileThreshold;
-    private List<HexTileBase> hexTileBases = new List<HexTileBase>();
+    [SerializeField] private float newTileThreshold;    //How far the player must move before evaluating new tiles
+    [SerializeField] private float spawnRadius;         //Radius within which to create new tiles
+    [SerializeField] float removeRadius;                //Radius to remove tiles
 
-    private List<GameObject> tiles = new List<GameObject>();
-    private Vector3 previousViewerPosition = Vector3.zero;
+
+    private List<HexTileBase> hexTileBases = new List<HexTileBase>();   //List of all tiles created
+    private Vector3 previousViewerPosition = Vector3.zero;              //Keep track of how far the player has moved
 
     // Start is called before the first frame update
     private void Start()
