@@ -6,13 +6,12 @@ public class HexTileSpawnerGeneric : MonoBehaviour
 {
 
     [SerializeField] private GameObject hexTile;        //Tile prefab
-    [SerializeField] private float tileRadius = 1       //Radius of tile;
+    [SerializeField] private float tileRadius = 1       //Radius of tile
 
     [SerializeField] private Transform viewer;
     [SerializeField] private float newTileThreshold;    //How far the player must move before evaluating new tiles
     [SerializeField] private float spawnRadius;         //Radius within which to create new tiles
     [SerializeField] float removeRadius;                //Radius to remove tiles
-
 
     private List<HexTileBase> hexTileBases = new List<HexTileBase>();   //List of all tiles created
     private Vector3 previousViewerPosition = Vector3.zero;              //Keep track of how far the player has moved
