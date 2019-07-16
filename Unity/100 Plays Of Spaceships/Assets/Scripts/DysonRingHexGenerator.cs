@@ -1,41 +1,44 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DysonRingHexGenerator : MonoBehaviour
 {
-    [SerializeField] GameObject hexTile;
-    
-    [SerializeField] float radius = 1;
+    [SerializeField] private GameObject hexTile;
 
-    [SerializeField] float angleIncrement = 1;
+    [SerializeField] private float radius = 1;
 
-    [SerializeField] int cylinderHeight = 6;
+    [SerializeField] private float angleIncrement = 1;
 
-    int steps;
+    [SerializeField] private int cylinderHeight = 6;
+
+    [SerializeField] private int spawnsPerFrame = 12;
+    private int steps;
+    private GameObject[] tiles;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+
         steps = (int)(360f / angleIncrement);
+        tiles = new GameObject[steps * cylinderHeight];
 
         StartCoroutine(GenerateTilesInCircle());
         //GenerateTilesInCircle();
     }
 
-    IEnumerator GenerateTilesInCircle()
+    private IEnumerator GenerateTilesInCircle()
     {
 
         //tileW must == cosine law
 
-        float tileW = Mathf.Sqrt(Sq(radius) + Sq(radius) - 2f * radius * radius * Mathf.Cos(Mathf.Deg2Rad*angleIncrement));
+        float tileW = Mathf.Sqrt(Sq(radius) + Sq(radius) - 2f * radius * radius * Mathf.Cos(Mathf.Deg2Rad * angleIncrement));
 
         //float tileW = tileSize * Mathf.Sqrt(3);
         float tileSize = tileW / Mathf.Sqrt(3);
         float tileH = tileSize * 2f;
 
-        
 
+        int c = 0;
         for (int h = -cylinderHeight / 2; h < cylinderHeight / 2; h++)
         {
 
@@ -43,6 +46,7 @@ public class DysonRingHexGenerator : MonoBehaviour
             float angleOffset;
 
             angleOffset = angleIncrement / 2 * (h % 2);
+
 
             for (float i = 0; i < 360; i += angleIncrement)
             {
@@ -56,7 +60,7 @@ public class DysonRingHexGenerator : MonoBehaviour
 
                 tile.transform.parent = transform;
 
-                float zpos =  h * tileH * 3 / 4 ;
+                float zpos = h * tileH * 3 / 4;
                 tile.transform.position = new Vector3(x, zpos, y);
                 tile.transform.localScale = Vector3.one * tileSize;
 
@@ -67,19 +71,63 @@ public class DysonRingHexGenerator : MonoBehaviour
 
                 tile.GetComponent<HexTileBase>().SetCoords((int)angle, h);
 
-                if(i % 6 == 0)
+                tiles[c] = tile;
+                tile.SetActive(false);
+                c++;
+
+                if (i % spawnsPerFrame == 0)
                 {
                     yield return null;
                 }
             }
-            
-
         }
+
+        // Somewhere else
+        // objectList is a List<GameObject>
+
+        // We don't want to mess up the original list, copy it
+        GameObject[] copyArray = new GameObject[tiles.Length];
+        System.Array.Copy(tiles, copyArray, tiles.Length);
+
+        ShuffleArray(copyArray);  // Call this more to shuffle again
+
+        c = 0;
+        foreach (GameObject obj in copyArray)
+        {
+            // This will be a random order of objectList
+
+
+            obj.SetActive(true);
+
+            if(c % spawnsPerFrame == 0)
+            {
+                yield return null;
+            }
+            c++;
+        }
+
         yield return null;
     }
 
-    float Sq(float a)
+    private float Sq(float a)
     {
         return (Mathf.Pow(a, 2));
     }
+
+    private void ShuffleArray<T>(T[] array)
+    {
+        int n = array.Length;
+        for (int i = 0; i < n; i++)
+        {
+            // Pick a new index higher than current for each item in the array
+            int r = i + Random.Range(0, n - i);
+
+            // Swap item into new spot
+            T t = array[r];
+            array[r] = array[i];
+            array[i] = t;
+        }
+    }
+
+
 }

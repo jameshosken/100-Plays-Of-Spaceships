@@ -15,6 +15,6 @@ public class AlignToVelocity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.forward = Vector3.Lerp(transform.forward, target.velocity, Time.deltaTime * rotationSpeed);
+        transform.forward = Vector3.Lerp(transform.forward, target.velocity, rotationSpeed);
     }
 }
