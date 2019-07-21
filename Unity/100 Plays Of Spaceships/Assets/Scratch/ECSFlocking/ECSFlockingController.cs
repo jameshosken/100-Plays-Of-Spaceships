@@ -19,6 +19,7 @@ public class ECSFlockingController : MonoBehaviour
     [SerializeField] float maxVel = 10f;
     [SerializeField] float maxForce = 10f;
     [SerializeField] float desiredSep = 5f;
+    [SerializeField] float cohesionDist = 10f;
 
 
 
@@ -44,9 +45,10 @@ public class ECSFlockingController : MonoBehaviour
 
             ECSFlockingComponent moverSpeed = new ECSFlockingComponent
             {
-                maximumVelocity     = maxVel,
-                maximumForce        = maxForce,
-                desiredSparation    = desiredSep,
+                maximumVelocity     = UnityEngine.Random.Range(maxVel / 3f, maxVel),
+                maximumForce        = UnityEngine.Random.Range(maxForce / 3f, maxForce),
+                cohesionDistance    = UnityEngine.Random.Range(cohesionDist/3f, cohesionDist),
+                desiredSparation    = UnityEngine.Random.Range(desiredSep / 2f, desiredSep),
                 velocity            = float3.zero,
                 acceleration        = float3.zero,
                 moveBounds          = startBounds

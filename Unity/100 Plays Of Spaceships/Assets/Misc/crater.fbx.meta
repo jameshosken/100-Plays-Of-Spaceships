@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dad3233ec4919d6479d5dc6704c4cd2a
+guid: 4e4c9e678435c6c4e9d5ab69dc2d9651
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: bevelcube.main
-    second: {fileID: 2100000, guid: f38caa6885661ac4693b808f8ed88bea, type: 2}
+      name: crater.mat
+    second: {fileID: 2100000, guid: 7fde2ab9c41235b40b357eb6a5dd94fd, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -41,7 +41,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1

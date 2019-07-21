@@ -1,10 +1,8 @@
-﻿
-
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LanderControl2D : MonoBehaviour
+public class LanderControl3D : MonoBehaviour
 {
     public enum State { Alive, Dead }
 
@@ -44,10 +42,26 @@ public class LanderControl2D : MonoBehaviour
 
     private void HandleInput()
     {
-        float turn = Input.GetAxis("Horizontal") * -1f; // Invert controls
-        Vector3 turnVector = new Vector3(0, 0, turn) * turnSpeed;
+        float turnLR = Input.GetAxis("Horizontal") * -1f; // Invert controls
+        float turnFB = Input.GetAxis("Vertical") * 1f; // Invert controls
+        float roll = 0;
 
-        body.AddRelativeTorque(turnVector);
+        if (Input.GetKey(KeyCode.Q))
+        {
+            roll = 1f;
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            roll = -1f;
+        }
+
+        Vector3 turnLRVector = new Vector3(0, 0, turnLR) * turnSpeed;
+        Vector3 turnFBVector = new Vector3(turnFB, 0, 0) * turnSpeed;
+        Vector3 rollVector = new Vector3(0, roll, 0) * turnSpeed;
+
+        body.AddRelativeTorque(turnLRVector);
+        body.AddRelativeTorque(turnFBVector);
+        body.AddRelativeTorque(rollVector);
 
         if (Input.GetKey(KeyCode.Space))
         {
@@ -102,7 +116,7 @@ public class LanderControl2D : MonoBehaviour
 
     void ReloadLevel()
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(0);
     }
 
     private void SetConstraints(bool status)
