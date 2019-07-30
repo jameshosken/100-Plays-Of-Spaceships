@@ -32,7 +32,7 @@ public class FlockingController : MonoBehaviour
             GameObject boid = Instantiate(boidTemplate) as GameObject;
             Vector3 random = new Vector3(
                 Random.Range(-startRadius, startRadius),
-                Random.Range(-startRadius, startRadius),
+                Random.Range(0,0),
                 Random.Range(-startRadius, startRadius)
                 );
 

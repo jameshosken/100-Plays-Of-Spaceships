@@ -25,7 +25,7 @@ public class SimpleRTSCamera : MonoBehaviour
     void Update()
     {
         float x = Input.GetAxis("Horizontal") * multiplier;
-        float y = Input.GetAxis("Mouse ScrollWheel")*-10 * zoomMultiplier;
+        float y = Input.GetAxis("Mouse ScrollWheel")* -10 * zoomMultiplier;
         float z = Input.GetAxis("Vertical") * multiplier;
 
         if (transform.position.y < minY)
