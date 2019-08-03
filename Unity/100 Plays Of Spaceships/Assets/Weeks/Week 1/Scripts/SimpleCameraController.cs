@@ -4,6 +4,7 @@ namespace UnityTemplateProjects
 {
     public class SimpleCameraController : MonoBehaviour
     {
+        [SerializeField] float sensitivity = 1f;
         class CameraState
         {
             public float yaw;
@@ -103,6 +104,7 @@ namespace UnityTemplateProjects
             {
                 direction += Vector3.up;
             }
+            direction *= sensitivity;
             return direction;
         }
         

@@ -6,6 +6,9 @@ public class Health : MonoBehaviour
 {
     [SerializeField] float health = 100;
     [SerializeField] GameObject deathFX;
+
+
+    int score = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,5 +29,9 @@ public class Health : MonoBehaviour
     {
         health -= damage;
         Debug.Log("HEALTH: " + health);
+
+        if(health <= 0){
+            score += 1;
+        }
     }
 }

@@ -9,6 +9,7 @@ public class ParticleHitHandler : MonoBehaviour
     [SerializeField] ParticleSystem particles;
     [SerializeField] float damage = 10;
     public List<ParticleCollisionEvent> collisionEvents;
+    
 
     // Start is called before the first frame update
     void Start()
