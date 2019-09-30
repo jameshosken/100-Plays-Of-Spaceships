@@ -44,7 +44,7 @@ public class EngineTrail : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         //if(Vector3.Distance(engine.position, pPosition) > updateFidelity)
         //{
@@ -52,13 +52,10 @@ public class EngineTrail : MonoBehaviour
         //    pPosition = engine.position;
         //}
 
-        if (Time.time - updateFidelity > pTime)
-        {
-            pTime = Time.time;
+        
             UpdatePoints();
-        }
-
-        float thrust = Input.GetAxis("Vertical");
+        
+        
 
 
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[ExecuteInEditMode]
 public class MarchingCubeGenerator : MonoBehaviour
 {
 
@@ -41,22 +41,35 @@ public class MarchingCubeGenerator : MonoBehaviour
 
     MarchingCubeChunk[,,] chunkMap;
 
+    [SerializeField] bool generateMap = false;
+
     private void Start()
     {
-        float startTime = Time.realtimeSinceStartup;
+        
         cam = Camera.main;
 
+    }
+
+
+
+    void GenerateMap()
+    {
+
+        float startTime = Time.realtimeSinceStartup;
         cubeWorld = new float[(int)worldbounds.x, (int)worldbounds.y, (int)worldbounds.z];
         GenerateCubeWorldData((int)worldbounds.x, (int)worldbounds.y, (int)worldbounds.z, worldType);
         chunkMap = new MarchingCubeChunk[(int)worldbounds.x / (int)chunkSize.x, (int)worldbounds.y / (int)chunkSize.y, (int)worldbounds.z / (int)chunkSize.z];
 
         Debug.Log("Scene generated in: " + (Time.realtimeSinceStartup - startTime).ToString() + " seconds");
 
-        addBrush.transform.localScale = Vector3.one * brushRadius*2;
-        removeBrush.transform.localScale = Vector3.one * brushRadius*2;
+        addBrush.transform.localScale = Vector3.one * brushRadius * 2;
+        removeBrush.transform.localScale = Vector3.one * brushRadius * 2;
 
         StartCoroutine(GenerateMapChunks());
+
+        generateMap = false;
     }
+
 
     IEnumerator GenerateMapChunks()
     {
@@ -97,6 +110,11 @@ public class MarchingCubeGenerator : MonoBehaviour
 
     private void Update()
     {
+        if (generateMap)
+        {
+            GenerateMap();
+        }
+
         bool change = false;
         if (Input.GetMouseButtonDown(0))
         {

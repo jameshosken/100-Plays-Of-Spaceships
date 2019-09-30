@@ -1,0 +1,265 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Flow
+
+struct Boid
+{
+	float3 pos;
+	float3 vel;
+	float3 multipliers;
+};
+
+int numBoids;
+float maxSpeed;
+float maxForce;
+float desiredSeparation;
+float neighbourDistance;
+float3 bounds;
+float2 noiseSettings;
+float3 seekTarget;
+float seekAmount;
+
+RWStructuredBuffer<Boid> dataBuffer;
+
+/////////////
+// HELPERS //
+/////////////
+
+float3 limit(float3 v, float l) {
+	float len = length(v);
+	if (len > l) {
+		v = v * l / len;
+	}
+	return v;
+}
+
+Boid ApplyForce(Boid boid, float3 force) {
+	boid.vel += force;
+	//Insert maxVel code here
+	boid.vel = limit(boid.vel, maxSpeed);
+	boid.pos += boid.vel;
+
+	return boid;
+}
+
+////////////////
+// SEPARATION //
+////////////////
+
+float3 Separation(Boid boid)
+{
+	float3 steer = float3(0, 0, 0);
+
+	int count = 0;
+
+	for (int i = 0; i < numBoids; i++)
+	{
+		Boid otherBoid = dataBuffer[i];
+
+		float d = distance(boid.pos, otherBoid.pos);
+
+		// If the distance is greater than 0 and less than an arbitrary amount (0 when you are yourself)
+		if ( (d > 0) && (d < desiredSeparation))
+		{
+
+			// Calculate vector pointing away from neighbor
+			float3 diff = boid.pos - otherBoid.pos;
+			diff = normalize(diff);
+			diff /= d;        // Weight by distance
+			steer += diff;
+			count++;            // Keep track of how many
+
+		}
+
+	}
+
+	if (count > 0)
+	{
+		steer /= (float)count;
+	}
+
+	// As long as the vector is greater than 0
+	if (length(steer) > 0)
+	{
+		steer = normalize(steer);
+		//steer *= maxSpeed;
+		steer = limit(steer, maxForce);
+	}
+	return steer;
+}
+
+
+///////////////
+// ALIGNMENT //
+///////////////
+
+
+float3 Alignment(Boid boid)
+{
+	float3 sum = float3(0, 0, 0);
+	int count = 0;
+
+	for (int i = 0; i < numBoids; i++)
+	{
+
+		Boid otherBoid = dataBuffer[i];
+		float d = distance(boid.pos, otherBoid.pos);
+
+		if ((d > 0) && (d < neighbourDistance))
+		{
+			sum += otherBoid.vel;
+			count++;
+		}
+	}
+
+
+	if (count > 0)
+	{
+		sum /= (float)count;
+
+		sum = normalize(sum);
+		sum *= maxSpeed;
+		float3 steer = sum - boid.vel;
+		steer = limit(steer, maxForce);
+		return steer;
+	}
+	else
+	{
+		return float3(0, 0, 0);
+	}
+}
+
+//////////////
+// COHESION //
+//////////////
+
+float3 Seek(Boid boid, float3 target)
+{
+	float3 desired = target - boid.pos;
+
+	desired = normalize(desired);
+	desired *= maxSpeed;
+
+	// Steering = Desired minus Velocity
+	float3 steer = desired - boid.vel;
+
+	steer = limit(steer, maxForce);
+
+	return steer;
+}
+
+float3 Cohesion(Boid boid)
+{
+	float3 sum = float3(0, 0, 0);   // Start with empty vector to accumulate all positions
+	int count = 0;
+
+	for (int i = 0; i < numBoids; i++)
+	{
+
+		Boid otherBoid = dataBuffer[i];
+
+
+		float d = distance(boid.pos, otherBoid.pos);
+
+		if ((d > 0) && (d < neighbourDistance))
+		{
+			sum += otherBoid.pos; // Add position
+			count++;
+		}
+	}
+
+	if (count > 0)
+	{
+		sum /= count;
+		return Seek(boid, sum);  // Steer towards the position
+	}
+	else
+	{
+		return float3(0, 0, 0);
+	}
+}
+
+
+////////////
+// BOUNDS //
+////////////
+
+Boid LimitBounds(Boid boid, float3 offset)
+{
+	//Branching = bad
+
+	float3 force = float3(0, 0, 0);
+	if (boid.pos.x > bounds.x + offset.x)
+	{
+		force.x = (bounds.x + offset.x) - boid.pos.x;
+	}
+	if (boid.pos.y > bounds.y + offset.y)
+	{
+		force.y = (bounds.y + offset.y) - boid.pos.y;
+	}
+	if (boid.pos.z > bounds.z + offset.z)
+	{
+		force.z = (bounds.z + offset.z) - boid.pos.z;
+	}
+
+	if (boid.pos.x < offset.x - bounds.x)
+	{
+		force.x = (offset.x - bounds.x) - (boid.pos.x);
+	}
+	if (boid.pos.y < offset.y - bounds.y)
+	{
+		force.y = (offset.y - bounds.y) - (boid.pos.y);
+	}
+	if (boid.pos.z < offset.z - bounds.z)
+	{
+		force.z = (offset.z - bounds.z) - (boid.pos.z);
+	}
+
+	force = limit(force, maxForce);
+	boid = ApplyForce(boid, force);
+
+	return boid;
+}
+
+
+
+Boid AddNoise(Boid boid) {
+
+	//boid.vel += sin(boid.pos * noiseSettings.x) * noiseSettings.y;
+
+	return boid;
+}
+
+[numthreads(100, 1, 1)]
+void Flow(uint3 id : SV_DispatchThreadID)
+{
+
+
+	Boid boid = dataBuffer[id.x];
+
+	float3 sep = Separation(boid);		// Separation
+	float3 ali = Alignment(boid);      // Alignment
+	float3 coh = Cohesion(boid);		// Cohesion
+	float3 seek = Seek(boid, seekTarget);
+
+	sep *= (boid.multipliers.x);
+	ali *= (boid.multipliers.y);
+	coh *= (boid.multipliers.z);
+	seek *= seekAmount;
+
+	// Add the force vectors to acceleration
+	boid = ApplyForce(boid, sep);
+	boid = ApplyForce(boid, ali);
+	boid = ApplyForce(boid, coh);
+	boid = ApplyForce(boid, seek);
+
+	//boid = LimitBounds(boid, float3(0, 0, 0));
+	//boid = AddNoise(boid);
+
+
+	// FRICTION //
+	dataBuffer[id.x].vel *= 0.98f;
+
+	dataBuffer[id.x].pos = boid.pos;
+	dataBuffer[id.x].vel = boid.vel;
+
+}

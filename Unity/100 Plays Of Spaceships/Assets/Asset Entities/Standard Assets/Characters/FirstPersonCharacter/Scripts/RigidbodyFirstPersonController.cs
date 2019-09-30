@@ -18,6 +18,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 	        public KeyCode RunKey = KeyCode.LeftShift;
             public float JumpForce = 30f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
+            public float slopeAmp = 0.5f;
             [HideInInspector] public float CurrentTargetSpeed = 8f;
 
 #if !MOBILE_INPUT
@@ -190,7 +191,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float SlopeMultiplier()
         {
             float angle = Vector3.Angle(m_GroundContactNormal, Vector3.up);
-            return movementSettings.SlopeCurveModifier.Evaluate(angle);
+            return movementSettings.SlopeCurveModifier.Evaluate(angle) ;
         }
 
 

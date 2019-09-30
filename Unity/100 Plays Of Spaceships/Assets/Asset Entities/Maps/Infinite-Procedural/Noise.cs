@@ -60,7 +60,7 @@ public static class Noise
                     noiseHeight += perlinValue * amplitude;
 
                     amplitude *= persistence;   // Amplitude decreases per cycle (0 < a < 1);
-                    freq *= lacunarity;         // Freq increases per cycles     (1 < f)
+                    freq *= lacunarity;         // Freq increases per cycles     (1 > f)
                 }
 
                 if (noiseHeight > maxNoiseHeight)

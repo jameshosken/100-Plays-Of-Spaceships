@@ -7,6 +7,7 @@ public class CameraDragRotate : MonoBehaviour
 
     [SerializeField] float damp = 0.1f;
 
+    
 
     // Update is called once per frame
     void LateUpdate()
