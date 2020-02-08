@@ -78,6 +78,7 @@ public class MarchingCubeChunk : MonoBehaviour
     {
         Debug.Log("World Position:");
         Debug.Log(worldPosition);
+        
 
         for (int x = 0; x < mapChunk.GetLength(0); x++)
         {

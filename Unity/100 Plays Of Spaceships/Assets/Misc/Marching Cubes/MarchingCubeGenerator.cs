@@ -58,6 +58,7 @@ public class MarchingCubeGenerator : MonoBehaviour
         float startTime = Time.realtimeSinceStartup;
         cubeWorld = new float[(int)worldbounds.x, (int)worldbounds.y, (int)worldbounds.z];
         GenerateCubeWorldData((int)worldbounds.x, (int)worldbounds.y, (int)worldbounds.z, worldType);
+        //Generate Array of Chunks for size of world
         chunkMap = new MarchingCubeChunk[(int)worldbounds.x / (int)chunkSize.x, (int)worldbounds.y / (int)chunkSize.y, (int)worldbounds.z / (int)chunkSize.z];
 
         Debug.Log("Scene generated in: " + (Time.realtimeSinceStartup - startTime).ToString() + " seconds");
